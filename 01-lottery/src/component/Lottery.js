@@ -96,7 +96,7 @@ class Lottery extends React.PureComponent
                 <tbody>
                 {
                     this.state.numbers.map((lotteryNumbers, index) =>
-                        <tr>
+                        <tr key={index}>
                             <td>{index+1}</td>
                             {
                                 lotteryNumbers.map(number =>
