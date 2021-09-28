@@ -23,7 +23,7 @@ console.log('Server is running at ' + port);
 
 // MongoDB
 const mongoose = require('mongoose');
-const mongodbUrl = "mongodb://root:example@localhost:27017/hr";
+const mongodbUrl = "mongodb://root:example@localhost:27017";
 
 mongoose.connect(mongodbUrl, {
     "useNewUrlParser": true,
