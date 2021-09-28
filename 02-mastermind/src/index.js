@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import 'bootstrap/dist/css/bootstrap.css';
+import MasterMindApp from './MasterMindApp';
 import reportWebVitals from './reportWebVitals';
+import App from "./App";
+import {Route, BrowserRouter as Router} from "react-router-dom";
+import UserWins from "./UserWins";
+import UserLoses from "./UserLoses";
+
+/* Static Routing Table */
+let routing = <Router>
+    <Route path="/" exact component={App}/>
+    <Route path="/wins" exact component={UserWins}/>
+    <Route path="/loses" exact component={UserLoses}/>
+</Router>
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      {routing}
+    {/*<MasterMindApp />*/}
+      <App/>
   </React.StrictMode>,
   document.getElementById('root')
 );
