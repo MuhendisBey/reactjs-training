@@ -1,3 +1,5 @@
 /node_modules/
 package-lock.json
 
+/.idea/
+/02-mastermind/src/.MasterMindApp.js.swp
