@@ -34,7 +34,7 @@ class Lottery extends React.PureComponent
     /* React'de state degisikliklerini bu sekilde yaparsan daha performant ve daha uyumlu oluyor.
     * Bu biraz fazla bellek tuketebilir o an icin ama react'in state'i degistiren heuristic calisan fonksiyonu bu sekilde
     * daha etkin calisiyor.*/
-    draw = (event) => {
+    draw = () => {
         let newLotteryNumbers = [...this.state.numbers];
         for (let i = 0; i < this.state.column; ++i) {
             newLotteryNumbers.push(this.getLotteryNumbers(1, 60, 6));
@@ -45,7 +45,7 @@ class Lottery extends React.PureComponent
         });
     }
 
-    reset = (event) => {
+    reset = () => {
         this.setState({
             numbers: []
         });
@@ -74,7 +74,43 @@ class Lottery extends React.PureComponent
         console.log("After calling setState():" + this.state.column);
     }
 
+    /*
+    *   Render methodu:
+    *       Component Base bir sekilde view yapiyor
+    *       Dinamik kisimlar icin functional programming kullaniyoruz. ornegin this.state.numbers.map(...)
+    */
     render = () => {
+        let table = ""; // View esan edilebilinir
+        if (this.state.numbers.length > 0) // Bu sayede table'in icinde hic eleman yok ise gosterme
+        {
+            table = <table className="table table-bordered table-hover table-responsive table-info ">
+                <thead>
+                <tr>
+                    <th>No</th>
+                    { //html icinde dinamik birsey yapiyorsan burada hep curly brace kullan
+                        Array.from(Array(6).keys()).map(i => <th>Column #{i+1}</th>)
+                    }
+                    <th>Operations</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    this.state.numbers.map((lotteryNumbers, index) =>
+                        <tr>
+                            <td>{index+1}</td>
+                            {
+                                lotteryNumbers.map(number =>
+                                    <td>{number}</td>)
+                            }
+                            <td>
+                                <button id={index+1} className="btn btn-danger" onClick={() => this.remove(index)}> Remove </button>
+                            </td>
+                        </tr>
+                    )
+                }
+                </tbody>
+            </table>;
+        }
         // return MVC's V(iew)
         return( // View
             <div className="container">
@@ -86,40 +122,14 @@ class Lottery extends React.PureComponent
                         <div className="form-group">
                             <label htmlFor="column">Column:</label>
                             <input id="column" name="column" type="text" value={this.state.column}
-                            onChange={this.handleChange}></input>
+    onChange={this.handleChange}/>
                         </div>
                         <div className="form-group">
                             <button className="btn-succes" onClick={this.draw}>Draw</button>
                             <button className="btn-succes" onClick={this.reset}>Reset</button>
                         </div>
                         <div className="form-group">
-                            <table className="table table-bordered table-hover table-responsive table-info ">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        { //html icinde dinamik birsey yapiyorsan burada hep curly brace kullan
-                                            Array.from(Array(6).keys()).map(i => <th>Column #{i+1}</th>)
-                                        }
-                                        <th>Operations</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    this.state.numbers.map((lotteryNumbers, index) =>
-                                        <tr>
-                                            <td>{index+1}</td>
-                                            {
-                                            lotteryNumbers.map(number =>
-                                                <td>{number}</td>)
-                                        }
-                                        <td>
-                                            <button id={index+1} className="btn btn-danger" onClick={() => this.remove(index)}> Remove </button>
-                                        </td>
-                                        </tr>
-                                    )
-                                }
-                                </tbody>
-                            </table>
+                            {table}
                         </div>
 
                     </div>
