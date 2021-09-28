@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
 import React from "react";
 import Move from './model/Move'
 import Badge from "./component/Badge";
@@ -27,9 +25,9 @@ import TableHeader from "./component/TableHeader";
 */
 class MasterMindApp extends React.PureComponent
 {
-  constructor(props, ctx)
+  constructor(props, context)
   {
-    super(props, ctx);
+    super(props, context);
     this.state = {
       game : {
         secretNumber : this.createSecretNumber(3),
@@ -48,24 +46,23 @@ class MasterMindApp extends React.PureComponent
   }
 
   /* when componen is loaded we shoud load back state from local storage*/
-  componentDidMount = () => {
-    let masterMindState = localStorage.getItem("mastermind-state");
-    if (null === masterMindState || undefined === masterMindState)
-    {
-      localStorage.setItem("mastermind-state", JSON.stringify(this.state))
-    }
-    else
-    {
-      let state = JSON.parse(masterMindState);
-      this.setState(state);
-    }
-  }
+  // componentDidMount = () => {
+  //   let masterMindState = localStorage.getItem("mastermind-state");
+  //   if (null === masterMindState || undefined === masterMindState)
+  //   {
+  //     localStorage.setItem("mastermind-state", JSON.stringify(this.state))
+  //   }
+  //   else
+  //   {
+  //     let state = JSON.parse(masterMindState);
+  //     this.setState(state);
+  //   }
+  // }
 
-  updateStateCallback = (state) =>
-  {
-    localStorage.setItem("mastermind-state", JSON.stringify(state));
-
-  }
+  // updateStateCallback = (state) =>
+  // {
+  //   localStorage.setItem("mastermind-state", JSON.stringify(state));
+  // }
 
   createDigit = (min, max) =>
   {
@@ -84,7 +81,10 @@ class MasterMindApp extends React.PureComponent
       }
     }
 
-    return digits.reduce((number, digit) => 10 * number + digit, 0);
+    let secretNumber = digits.reduce((number, digit) => 10 * number + digit, 0);
+    console.log("Generated secretNumber: " + secretNumber.toString())
+
+    return secretNumber;
   }
 
   play = () =>
@@ -163,21 +163,21 @@ class MasterMindApp extends React.PureComponent
 
   handleChange = (event) =>
   {
-    this.setState({
-      game : {
-        guessNumber : Number(event.target.value)
-      }
-    });
-    console.log("After calling setState():" + this.state.column);
+    let tmpGameState = {...this.state.game};
+    console.log("event.target.value: " + event.target.value);
+    tmpGameState.guessNumber = Number(event.target.value);
+    this.setState({game: tmpGameState});
+    console.log("After calling setState():" + this.state.game.guessNumber);
   }
 
   render = () =>
   {
+    console.log("Called MasterMind.render");
     return ( // View kucuk oldugu surece recon.. algorimasinin daha hizli calismasini saglar
         <div className="container">
           <div className="card">
             <div className="card-header">
-              <CardTitle title="Game Console"/>
+              <CardTitle title="MasterMind: Game Console"/>
             </div>
             <div className="card-body">
               <div className="form-group">
@@ -192,11 +192,11 @@ class MasterMindApp extends React.PureComponent
                        name="guess"
                        className="form-control"
                        onChange={this.handleChange}
-                       type="text" value={this.state.game.guess}/>
+                       type="text" value={this.state.game.guessNumber}/>
               </div>
               <div className="form-group">
                 <button className="btn btn-success"
-                        onClick={this.play}>Play
+                        onClick={this.play}> Play
                 </button>
               </div>
             </div>
