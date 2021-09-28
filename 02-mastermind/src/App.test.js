@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import App from './MasterMindApp';
+import MasterMindApp from './MasterMindApp';
 
 test('renders learn react link', () => {
-  render(<App />);
+  render(<MasterMindApp />);
   const linkElement = screen.getByText(/learn react/i);
   expect(linkElement).toBeInTheDocument();
 });

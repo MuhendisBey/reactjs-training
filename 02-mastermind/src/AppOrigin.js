@@ -1,4 +1,3 @@
-import './App.css';
 import React from "react";
 import Move from "./model/Move";
 import Badge from "./component/Badge";
@@ -17,7 +16,7 @@ import TableHeader from "./component/TableHeader";
 // Stateless + Stateful Component ✔
 // Component Life Cycle
 // -> Redux, -> Routing
-class App extends React.PureComponent {
+class AppOrigin extends React.PureComponent {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -155,7 +154,7 @@ class App extends React.PureComponent {
         return (
             <div className="container">
                 <div className="card">
-                    <CardTitle title="Game Console"></CardTitle>
+                    <CardTitle title="Game Console"></CardTitle> //AppOriginJS: Game Console
                     <div className="card-body">
                         <Badge id="level"
                                label="Game Level"
@@ -223,4 +222,4 @@ class App extends React.PureComponent {
     }
 }
 
-export default App;
+export default AppOrigin;
