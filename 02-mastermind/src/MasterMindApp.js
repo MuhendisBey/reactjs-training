@@ -23,50 +23,79 @@ import TableHeader from "./component/TableHeader";
 *
 * Dinamik olarak uretilen yerlerde muhakkak "key"i kullan. Daha etkin konsulasyon yapiyor.
 */
-class MasterMindApp extends React.PureComponent
-{
-  constructor(props, context)
-  {
+class MasterMindApp extends React.PureComponent {
+  constructor(props, context) {
     super(props, context);
     this.state = {
-      game : {
-        secretNumber : this.createSecretNumber(3),
-        level : 3,
-        tries : 0,
-        guessNumber : 123,
-        moves : [],
-        timeout : 60,
+      game: {
+        secretNumber: this.createSecretNumber(3),
+        level: 3,
+        tries: 0,
+        guessNumber: 123,
+        moves: [],
+        timeout: 60,
       },
-      statistics : {
-        wins : 0,
-        loses : 0,
-        averageWinTime : 0 //TODO
+      statistics: {
+        wins: 0,
+        loses: 0,
+        averageWinTime: 0 //TODO
       }
     }
   }
 
   /* when componen is loaded we shoud load back state from local storage*/
-  // componentDidMount = () => {
-  //   let masterMindState = localStorage.getItem("mastermind-state");
-  //   if (null === masterMindState || undefined === masterMindState)
-  //   {
-  //     localStorage.setItem("mastermind-state", JSON.stringify(this.state))
-  //   }
-  //   else
-  //   {
-  //     let state = JSON.parse(masterMindState);
-  //     this.setState(state);
-  //   }
-  // }
+  componentDidMount = () => {
+    let masterMindState = localStorage.getItem("mastermind-state");
+    if (null === masterMindState || undefined === masterMindState) {
+      localStorage.setItem("mastermind-state", JSON.stringify(this.state))
+    } else {
+      let state = JSON.parse(masterMindState);
+      this.setState(state);
+    }
+  }
 
   // updateStateCallback = (state) =>
   // {
   //   localStorage.setItem("mastermind-state", JSON.stringify(state));
   // }
 
-  createDigit = (min, max) =>
+  createDigit = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+
+  createEmptyGameState = () => {
+    let game = {};
+    game.secretNumber = this.createSecretNumber(3);
+    game.level = 3;
+    game.tries = 0;
+    game.guessNumber = 123;
+    game.moves = [];
+    game.timeout = 60;
+
+    return game;
+  }
+
+  saveStateOnLocalStorage = () =>
   {
-    return Math.floor(Math.random() * (max  - min + 1 ) + min);
+    let tmpState = {...this.state};
+    localStorage.setItem("mastermind-state", JSON.stringify(tmpState));
+  }
+
+  resetGameStateCallback = () =>
+  {
+    this.saveStateOnLocalStorage();
+    this.props.history.push("/wins");
+  }
+
+  resetGameState = () =>
+  {
+    this.setState({game: this.createEmptyGameState()}, (game) => this.resetGameStateCallback(game));
+  }
+
+  incrementGameState = () =>
+  {
+    let tmpGame = this.createEmptyGameState();
+    tmpGame.level = this.state.game.level++;
   }
 
   createSecretNumber = (level) =>
@@ -98,9 +127,9 @@ class MasterMindApp extends React.PureComponent
       game.level++;
       if (game.level > 10)
       {
-        // TODO player wins
+        console.log("Player Wins");
         statistics.wins++;
-        this.props.history.push("/wins");
+        this.resetGameState();
       }
       else
       {
