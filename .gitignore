@@ -3,3 +3,4 @@ package-lock.json
 
 /.idea/
 /02-mastermind/src/.MasterMindApp.js.swp
+/04-binanceWebSocketFullstackApp/binance-websocket/node_modules/
